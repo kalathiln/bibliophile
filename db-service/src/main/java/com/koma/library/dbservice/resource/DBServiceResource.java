@@ -1,5 +1,6 @@
 package com.koma.library.dbservice.resource;
 
+import com.koma.library.dbservice.model.Quote;
 import com.koma.library.dbservice.model.Quotes;
 import com.koma.library.dbservice.repository.QuotesRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,17 +34,43 @@ public class DBServiceResource {
 
 	@GetMapping("/{username}")
 	public List<String> getQuotes(@PathVariable("username") final String username) {
-
-		return quotesRepository.findByUserName(username).stream().map(quote -> {
-			return quote.getQuote();
-		}).collect(Collectors.toList());	}
-	
-	@PostMapping("/add")
-	public List<String> add(@RequestBody final Quotes quotes){
-		
-		return null;
-		
+		return getQuotesByUserName(username);
 	}
 	
+	private List<String> getQuotesByUserName(@PathVariable("username") final String username){
+		 return quotesRepository.findByUserName(username)
+				 .stream()
+				 .map(quote -> {
+			return quote.getQuote();
+		}).collect(Collectors.toList());
+	}
+	
+	@PostMapping("/delete/{username}")
+    public List<String> delete(@PathVariable("username") final String username) {
 
+        List<Quote> quotes = quotesRepository.findByUserName(username);
+        System.out.println("quotes asdasd:"+quotes);
+        quotesRepository.findByUserName(username)
+        .stream()
+        .forEach(quote -> {
+        	quotesRepository.delete(quote);
+        });
+        
+        
+        
+
+        return getQuotesByUserName(username);
+    }
+	
+	
+	@PostMapping("/add")
+	public List<String> add(@RequestBody final Quotes quotes) {
+		quotes.getQuotes()
+		.stream()
+		.map(quote -> (new Quote(quotes.getUserName(), quote)))
+		.forEach(quote -> {
+			quotesRepository.save(quote);
+		});
+		return getQuotesByUserName(quotes.getUserName());
+	}
 }
