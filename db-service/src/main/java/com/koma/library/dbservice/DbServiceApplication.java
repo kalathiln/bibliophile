@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = com.koma.library.dbservice.repository)
+@EnableJpaRepositories(basePackages = "com.koma.library.dbservice.repository")
 public class DbServiceApplication {
 
 	public static void main(String[] args) {
