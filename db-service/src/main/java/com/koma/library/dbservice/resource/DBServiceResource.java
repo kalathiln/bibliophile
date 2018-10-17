@@ -1,6 +1,5 @@
 package com.koma.library.dbservice.resource;
 
-import com.koma.library.dbservice.model.Quote;
 import com.koma.library.dbservice.model.Quotes;
 import com.koma.library.dbservice.repository.QuotesRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +26,10 @@ import java.util.stream.Collectors;
  */
 public class DBServiceResource {
 	private QuotesRepository quotesRepository;
+
+	public DBServiceResource(QuotesRepository quotesRepository) {
+		this.quotesRepository = quotesRepository;
+	}
 
 	@GetMapping("/{username}")
 	public List<String> getQuotes(@PathVariable("username") final String username) {
